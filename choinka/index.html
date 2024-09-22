@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator choinki</title>
+    <link rel="shortcut icon" href="choinka.png" type="image/x-icon">
+    <style>
+        body {
+            font-family: monospace, Arial, Helvetica, sans-serif;
+        }
+        main {
+            width: 100%;
+            margin: 0 auto;
+            text-align: center;
+        }
+        input {
+            font-size: 20px;
+            padding: 10px;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            outline: none;
+        }
+        input[type="submit"] {
+            margin: 10px 0;
+            background-color: rgba(240, 240, 240, 0.7);
+            transition: background-color 0.2s ease-in-out;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: rgba(215, 215, 215, 0.7);
+            transition: background-color 0.2s ease-in-out;
+            
+        }
+        #output {
+            margin-top: 20px;
+        }
+        footer {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            padding: 10px;
+            font-size: 20px;
+            background-color: rgba(240, 240, 240, 0.7);
+            backdrop-filter: blur(2px);
+            border-radius: 0 10px 0 0;
+            border-top: 1px solid rgba(0, 0, 0, 0.2);
+            border-right: 1px solid rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <input type="number" name="height" placeholder="Wysokość choinki">
+        <input type="submit" value="Wygeneruj">
+        <div id="output"></div>
+    </main>
+    <footer>
+        Autor: Dawid Sudnicki 2024
+    </footer>
+</body>
+<script>
+    const height = document.querySelector('input[name="height"]');
+    const button = document.querySelector('input[type="submit"]');
+    const output = document.querySelector('#output');
+    button.addEventListener('click', () => {
+        output.innerHTML = '';
+                
+        const heightValue = Math.round(height.value);
+        const charactersOnScreen = window.innerWidth / 16;
+
+        if(charactersOnScreen < heightValue) {
+            alert('Taka choinka nie zmieści się na twoim ekranie!');
+        } else {
+            if (heightValue <= 1) {
+                output.innerHTML = 'Mam rozumieć, że chcesz choinkę... ale na odwrót? 🤦‍♂️ <br>';
+                output.innerHTML += 'No dobra to masz: <br><br>';
+                let starsCount = heightValue * 2 - 1;
+                console.log(starsCount);
+                output.innerHTML += '|| <br>';
+                for (let i = heightValue; i <= -1; i++) {
+                    console.log("wszedł do pierwszego for'a")
+                    const row = [];
+                    for (let j = starsCount; j <= -3; j++) {
+                        console.log("wszedł do drugiego for'a")
+                        let symbol=Math.random().toString(36).slice(2,3)   
+                        row.push(symbol);
+                    }
+                    output.innerHTML += row.join('') + '<br>';
+                    starsCount += 2;
+                }
+            }
+            else if(heightValue == 0) {
+                console.log(heightValue);
+                output.innerHTML = 'Chcesz sam pień choinki czy co? <br>';
+                output.innerHTML += 'No dobra to masz: <br><br>';
+                output.innerHTML += '||';
+            }
+            else if (heightValue >= 1) {
+                let starsCount = 1;
+                for (let i = 1; i <= heightValue; i++) {
+                    const row = [];
+                    for (let j = 0; j < starsCount; j++) {
+                        let symbol=Math.random().toString(36).slice(2,3)    
+                        row.push(symbol);
+                    }
+                    output.innerHTML += row.join('') + '<br>';
+                    starsCount += 2;
+                }
+                output.innerHTML += '||';
+            }
+        }
+    }); 
+</script>
+</html>

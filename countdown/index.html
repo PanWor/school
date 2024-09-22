@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>ODLICZANIE</title>
+  </head>
+  <body>
+    <section class="wrapper">
+      <div class="content">
+        <header>
+          <h1>ODLICZANIE DO DATY</h1>
+        </header>
+        <footer>
+            <div>
+              <label for="date-input">Wybierz datę:</label>
+              <input type="datetime-local" id="date-input">
+            </div>
+            <h2>LUB</h2>
+            <div>
+              <label for="predefiniowane-daty">Wybierz wstępnie zdefiniowaną datę:</label>
+              <select id="predefiniowane-daty">
+                <option value="" disabled selected>Wybierz...</option>
+                <option value="2024-09-01T09:00">Początek roku szkolnego</option>
+                <option value="2024-06-21T00:00">Wakacje</option>
+                <option value="2024-04-26T00:00">Wakacje (dla maturzystów)</option>
+              </select>
+            </div>
+        </footer>
+        <section>
+          <p id="result">Tutaj wyświetli się odliczanie</p>
+        </section>
+      </div>
+    </section>
+    <script>
+      
+      // Pobieranie elementów z DOM
+      const dateInput = document.getElementById("date-input");
+      const predefiniowaneDaty = document.getElementById("predefiniowane-daty");
+      const resultElement = document.getElementById("result");
+
+      // Funkcja odświeżająca odliczanie
+      const odswiezOdliczanie = () => {
+        // Pobranie wybranej daty
+        const wybranaData = dateInput.value || predefiniowaneDaty.value;
+
+        // Jeśli brakuje wybranej daty, wyczyść wynik
+        if (!wybranaData) {
+          resultElement.textContent = "";
+          return;
+        }
+
+        // Przekonwertowanie wybranej daty na obiekt Date
+        const dataDocelowa = new Date(wybranaData);
+
+        // Pobranie bieżącej daty i obliczenie różnicy czasu
+        const dataBiezaca = new Date();
+        const roznicaCzasu = dataDocelowa.getTime() - dataBiezaca.getTime();
+
+        // Obliczenie różnic w różnych jednostkach
+        const sekundyWDniu = 24 * 60 * 60;
+        const roznicaDni = Math.floor(roznicaCzasu / (1000 * sekundyWDniu));
+        const roznicaGodzin = Math.floor((roznicaCzasu % (1000 * sekundyWDniu)) / (1000 * 60 * 60));
+        const roznicaMinut = Math.floor((roznicaCzasu % (1000 * 60 * 60)) / (1000 * 60));
+        const roznicaSekund = Math.floor((roznicaCzasu % (1000 * 60)) / 1000);
+
+        // Wyświetlenie wyniku
+        if (roznicaCzasu > 0) {
+          resultElement.setAttribute("class", "odliczanie");
+          resultElement.textContent = `${roznicaDni} dni, ${roznicaGodzin} godzin, ${roznicaMinut} minut i ${roznicaSekund} sekund`;
+        } else {
+          // W przypadku gdy data jest w przeszłości
+          resultElement.textContent = "Osiągnięto wybraną datę.";
+        }
+      };
+
+      // Wywołanie funkcji odświeżającej odliczania przy początkowym ładowaniu strony
+      odswiezOdliczanie();
+
+      // Okresowe wywołanie funkcji odświeżającej odliczania (co sekundę, czyli 1000ms)
+      setInterval(odswiezOdliczanie, 1000);
+
+      // Przypisanie odświeżania odliczania przy zmianie wartości w inputach
+      dateInput.addEventListener("input", odswiezOdliczanie);
+      predefiniowaneDaty.addEventListener("input", odswiezOdliczanie); 
+    </script>
+  </body>
+</html>
